@@ -4,21 +4,27 @@ import argparse
 import os
 
 def addf(todfile,option,parser):
-	with open('.~todfile','w') as tmpfile:
-		for line in todfile.readlines():
-			tmpfile.write(line)
-		tmpfile.write("* " + option + "\n")
-	os.rename('.~todfile','.todfile')
+	if option:
+		with open('.~todfile','w') as tmpfile:
+			for line in todfile.readlines():
+				tmpfile.write(line)
+			tmpfile.write("* " + option + "\n")
+		os.rename('.~todfile','.todfile')
+	else:
+		parser.print_help()
 
 def removef(todfile,option,parser):
-	with open('.~todfile','w') as tmpfile:
-		for line in todfile:
-			if option in line:
-				line = line.replace('*','-',1)
-				tmpfile.write(line)
-			else:
-				tmpfile.write(line)
-	os.rename('.~todfile','.todfile')
+	if option:
+		with open('.~todfile','w') as tmpfile:
+			for line in todfile:
+				if option in line:
+					line = line.replace('*','-',1)
+					tmpfile.write(line)
+				else:
+					tmpfile.write(line)
+		os.rename('.~todfile','.todfile')
+	else:
+		parser.print_help()
 
 def listf(todfile,option,parser):
 	lines = todfile.readlines()
@@ -35,9 +41,6 @@ def listf(todfile,option,parser):
 				print line.rstrip()
 	else:
 		parser.print_help()
-		
-	
-	return 0
 
 def main():
 	#Parse all the input stuffs
