@@ -2,8 +2,9 @@
 
 import argparse
 import os
+from pytodoError import OptionError
 
-def addf(todfile,option,parser):
+def addf(todfile,option):
 	if option:
 		with open('.~todfile','w') as tmpfile:
 			for line in todfile.readlines():
@@ -11,9 +12,9 @@ def addf(todfile,option,parser):
 			tmpfile.write("* " + option + "\n")
 		os.rename('.~todfile','.todfile')
 	else:
-		parser.print_help()
+		raise OptionError("add",option)
 
-def removef(todfile,option,parser):
+def removef(todfile,option):
 	if option:
 		with open('.~todfile','w') as tmpfile:
 			for line in todfile:
@@ -24,9 +25,9 @@ def removef(todfile,option,parser):
 					tmpfile.write(line)
 		os.rename('.~todfile','.todfile')
 	else:
-		parser.print_help()
+		raise OptionError("remove",option)
 
-def listf(todfile,option,parser):
+def listf(todfile,option):
 	lines = todfile.readlines()
 	if option == "" or option == "todo":
 		for line in lines:
@@ -40,7 +41,7 @@ def listf(todfile,option,parser):
 			if line[0] == "-":
 				print line.rstrip()
 	else:
-		parser.print_help()
+		raise OptionError("list",option)
 
 def main():
 	#Parse all the input stuffs
@@ -53,13 +54,17 @@ def main():
 	args = parser.parse_args()
 
 	#Handle the input file
-	with open('.todfile','r') as todfile:
-		if args.command == 'add':
-			addf(todfile,args.option,parser)
-		elif args.command == 'remove':
-			removef(todfile,args.option,parser)
-		elif args.command == 'list':
-			listf(todfile,args.option,parser)
+	try:
+		with open('.todfile','r') as todfile:
+			if args.command == 'add':
+				addf(todfile,args.option)
+			elif args.command == 'remove':
+				removef(todfile,args.option)
+			elif args.command == 'list':
+				listf(todfile,args.option)
+	except OptionError as err:
+		print "\"" + err.option + "\" is not a valid option for " + err.function
+		parser.print_help()	
 
 if __name__ == '__main__':
 	main()
