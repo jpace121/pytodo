@@ -21,7 +21,22 @@ def removef(todfile,option,parser):
 	os.rename('.~todfile','.todfile')
 
 def listf(todfile,option,parser):
-
+	lines = todfile.readlines()
+	if option == "" or option == "todo":
+		for line in lines:
+			if line[0] == '*':
+				print line.rstrip()
+	elif option == "all":
+		for line in lines:
+			print line.rstrip()
+	elif option == "done":
+		for line in lines:
+			if line[0] == "-":
+				print line.rstrip()
+	else:
+		parser.print_help()
+		
+	
 	return 0
 
 def main():
@@ -30,7 +45,7 @@ def main():
 	    on GitHub.")
 	parser.add_argument("command", type=str, choices=['add','remove','list'],
 	    help="What needs to be accomplished.")
-	parser.add_argument("option", type=str, default = "", 
+	parser.add_argument("option", type=str, nargs = '?', default = "", 
 	    help = "Specify option for specific subcommand.")
 	args = parser.parse_args()
 
@@ -45,5 +60,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
-	
