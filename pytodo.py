@@ -5,6 +5,7 @@ import os
 from pytodoError import OptionError
 
 def addf(todofile,option):
+	"""Adds file to do list."""
 	if option:
 		with opentodofile(todofile) as todfile:
 			with open('.~todofile','w') as tmpfile:
@@ -16,6 +17,7 @@ def addf(todofile,option):
 		raise OptionError("add",option)
 
 def removef(todofile,option):
+	"""Removes item from the given todo file location"""
 	if option:
 		with opentodofile(todofile) as todfile:
 			with open('.~todfile','w') as tmpfile:
@@ -30,6 +32,8 @@ def removef(todofile,option):
 		raise OptionError("remove",option)
 
 def listf(todofile,option):
+	"""Prints the items on the todo list, given the file Location and and option
+	   either all, done, or todo specifying which items to print"""
 	with opentodofile(todofile) as todfile:
 		lines = todfile.readlines()
 		if option == "" or option == "todo":
@@ -47,12 +51,16 @@ def listf(todofile,option):
 			raise OptionError("list",option)
 
 def opentodofile(fileLoc):
+	"""Returns file object given its location.  Generic file opener."""
 	if os.path.exists(fileLoc):
 		todofile = open(fileLoc,'r')
 	else:
 		todofile = open(fileLoc,'w+')
 
 	return todofile
+
+def cleanf(fileloc):
+	"""Stud for future clean function"""
 
 def main():
 	#Parse all the input stuffs
