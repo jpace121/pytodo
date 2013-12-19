@@ -19,3 +19,9 @@ To list items:
 ```sh
 pytodo.py list
 ```
+
+To clean out the file, so that the deleted items permanenly are erased:    
+    
+```sh    
+pytodo.py clean    
+```    

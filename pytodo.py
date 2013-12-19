@@ -59,15 +59,23 @@ def opentodofile(fileLoc):
 
 	return todofile
 
-def cleanf(fileloc):
-	"""Stud for future clean function"""
+def cleanf(todofile):
+	"""Cleans the removed items from the file"""
+	with opentodofile(todofile) as todfile:
+		with open(".~todfile",'w') as tmpfile:
+			for line in todfile:
+				if line[0] != '-':
+					tmpfile.write(line)
+	os.rename('.~todfile',todofile)
+					
+		
 
 def main():
 	#Parse all the input stuffs
 	parser = argparse.ArgumentParser(description="Simple ToDo Script.  Find me\
 	    on GitHub.")
 	parser.add_argument("command", type=str, choices=['add','remove','list',
-		'delete'], help="What needs to be accomplished.")
+		'clean'], help="What needs to be accomplished.")
 	parser.add_argument("option", type=str, nargs = '?', default = "", 
 	    help = "Specify option for specific subcommand.")
 	parser.add_argument("-f","--file",type=str,action='store',dest="fileloc",
@@ -83,6 +91,8 @@ def main():
 			removef(todofile,args.option)
 		elif args.command == 'list':
 			listf(todofile,args.option)
+		elif args.command == 'clean':
+			cleanf(todofile)
 	except OptionError as err:
 		print "\"" + err.option + "\" is not a valid option for " + err.function
 		parser.print_help()	
